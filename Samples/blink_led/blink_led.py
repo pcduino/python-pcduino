@@ -16,7 +16,7 @@ def setup():
 def loop():
     while(1):
         gpio.digitalWrite(led_pin, gpio.HIGH)
-        delay(100)
+        delay(101)
         gpio.digitalWrite(led_pin, gpio.LOW)
         delay(100)
 
