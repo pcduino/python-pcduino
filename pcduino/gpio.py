@@ -2,11 +2,10 @@
 #
 # io test code for pcDuino ( http://www.pcduino.com )
 #
+from exceptions import InvalidChannelException
 __all__ = ['HIGH', 'LOW', 'INPUT', 'OUTPUT','digitalWrite', 'digitalRead', "pinMode"]
 
-_GPIO_PINS = ('gpio0','gpio1','gpio2','gpio3','gpio4','gpio5','gpio6','gpio7',
-                'gpio8', 'gpio9', 'gpio10', 'gpio11', 'gpio12', 'gpio13',
-                'gpio14', 'gpio15', 'gpio16', 'gpio17', 'gpio18', 'gpio19')
+_GPIO_PINS = set(('gpio%s' % i for i in xrange(20)))
 
 _PIN_FD_PATH = '/sys/devices/virtual/misc/gpio/pin/%s'
 _MODE_FD_PATH = '/sys/devices/virtual/misc/gpio/mode/%s'
@@ -15,30 +14,26 @@ LOW = 0
 INPUT = 0
 OUTPUT = 1
 
-class InvalidChannelException(Exception):
-    """The channel sent is invalid on pcDuino board """
-    pass
-
-def _GetValidId(channel):
+def _get_valid_id(channel):
     if channel in _GPIO_PINS:
         return channel
     else:
         raise InvalidChannelException
 
-def digitalWrite(channel, value):
+def digital_write(channel, value):
     """Write to a GPIO channel"""
-    id = _GetValidId(channel)
+    id = _get_valid_id(channel)
     with open(_PIN_FD_PATH % id, 'w') as f:
         f.write('1' if value == HIGH else '0')
 
-def digitalRead(channel):
+def digital_read(channel):
     """Read from a GPIO channel"""
-    id = _GetValidId(channel)
+    id = _get_valid_id(channel)
     with open(_PIN_FD_PATH % id, 'r') as f:
         return f.read(1) == '1'
 
-def pinMode(channel, mode):
+def pin_mode(channel, mode):
     """ Set Mode of a GPIO channel """
-    id = _GetValidId(channel)
+    id = _get_valid_id(channel)
     with open(_MODE_FD_PATH % id, 'w') as f:
         f.write('0' if mode == INPUT else '1')
