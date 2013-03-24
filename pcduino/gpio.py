@@ -3,7 +3,8 @@
 # io test code for pcDuino ( http://www.pcduino.com )
 #
 from exceptions import InvalidChannelException
-__all__ = ['HIGH', 'LOW', 'INPUT', 'OUTPUT','digitalWrite', 'digitalRead', "pinMode"]
+__all__ = ['HIGH', 'LOW', 'INPUT', 'OUTPUT','digital_write', 'digital_read',
+           "pin_mode"]
 
 _GPIO_PINS = set(('gpio%s' % i for i in xrange(20)))
 

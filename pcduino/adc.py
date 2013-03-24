@@ -11,6 +11,6 @@ def _get_path(id_):
         return os.path.join(_ADC_PREFIX, id_)
     raise InvalidChannelException
 
-def analogRead(channel):
-    with open(_ADC_PREFIX % channel, 'r') as f:
-        return "%s" % f.read(32)
+def analog_read(channel):
+    with open(_get_path(channel), 'r') as f:
+        return int(f.read(32).split(':')[1].strip())

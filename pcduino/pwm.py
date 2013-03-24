@@ -1,2 +1,2 @@
-def digitalWrite(channel, value):
+def analog_write(channel, value):
     pass
