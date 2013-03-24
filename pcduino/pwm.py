@@ -12,5 +12,4 @@ def _max_value(pin):
 def analog_write(pin, value):
     map_level = (_max_value(pin) * value) / MAX_PWM_LEVEL
     with open("%s%d/%s" % (PWM_IF_PREFIX, pin, PWM_IF), 'w+') as f:
-        f.seek(0)
         f.write("%d\n" % map_level)
