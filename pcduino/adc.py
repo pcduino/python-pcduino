@@ -1,16 +1,13 @@
-from exceptions import InvalidChannelException
-import os.path
+from pinmap import PinMap
 
-_ADC_PREFIX = '/proc'
-_N_PINS= 6
-_ADC_PINS = set(('adc%s' % i for i in xrange(_N_PINS)))
-
-
-def _get_path(id_):
-    if id_ in _ADC_PINS:
-        return os.path.join(_ADC_PREFIX, id_)
-    raise InvalidChannelException
+pins = PinMap('/proc', 'adc', 6)
 
 def analog_read(channel):
-    with open(_get_path(channel), 'r') as f:
+    """Return the integer value of an adc pin.
+
+    adc0 and adc1 have 6 bit resolution.
+    adc2 through adc5 have 12 bit resolution.
+
+    """
+    with open(pins.get_path(channel), 'r') as f:
         return int(f.read(32).split(':')[1].strip())

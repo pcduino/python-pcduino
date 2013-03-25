@@ -1,21 +1,28 @@
-MAX_PWM_NUM = 5
-PWM_IF_PREFIX = "/sys/class/leds/pwm"
-PWM_IF_MAX = "max_brightness"
-PWM_IF = "brightness"
+import os.path
+
+from pinmap import PinMap
+
+
+pins = PinMap('/sys/class/leds', 'pwm', 5)
 
 MAX_PWM_LEVEL = 255
 
-def _max_value(pin):
-    with open("%s%d/%s" % (PWM_IF_PREFIX, pin, PWM_IF_MAX)) as f:
-        return int(f.read())
-
 def analog_write(pin, value):
-    if (pin < 0 or pin > MAX_PWM_NUM or
-        value < 0 or value > MAX_PWM_LEVEL):
+    """Write to one of the pwm pins.
+
+    value can be an number between 0 and 255.
+
+    """
+    path = pins.get_path(pin)
+
+    with open(os.path.join(path, 'max_brightness')) as f:
+        max_value = int(f.read())
+
+    if value < 0 or value > MAX_PWM_LEVEL:
         raise ValueError(
             "pin must be between 0 and %s. value must be between 0 and %s" % (
                 MAX_PWM_NUM, MAX_PWM_LEVEL))
 
-    map_level = (_max_value(pin) * value) / MAX_PWM_LEVEL
-    with open("%s%d/%s" % (PWM_IF_PREFIX, pin, PWM_IF), 'w+') as f:
+    map_level = (max_value * value) / MAX_PWM_LEVEL
+    with open(os.path.join(path, 'brightness'), 'w+') as f:
         f.write("%d\n" % map_level)
