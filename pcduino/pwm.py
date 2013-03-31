@@ -19,9 +19,7 @@ def analog_write(pin, value):
         max_value = int(f.read())
 
     if value < 0 or value > MAX_PWM_LEVEL:
-        raise ValueError(
-            "pin must be between 0 and %s. value must be between 0 and %s" % (
-                MAX_PWM_NUM, MAX_PWM_LEVEL))
+        raise ValueError("value must be between 0 and %s" % MAX_PWM_LEVEL)
 
     map_level = (max_value * value) / MAX_PWM_LEVEL
     with open(os.path.join(path, 'brightness'), 'w+') as f:
