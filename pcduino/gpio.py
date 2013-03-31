@@ -15,6 +15,12 @@ gpio_pins = PinMap(
     20
 )
 
+gpio_mode_pins = PinMap(
+    '/sys/devices/virtual/misc/gpio/mode/',
+    'gpio',
+    20
+)
+
 def digital_write(channel, value):
     """Write to a GPIO channel"""
     path = gpio_pins.get_path(channel)
@@ -29,6 +35,6 @@ def digital_read(channel):
 
 def pin_mode(channel, mode):
     """ Set Mode of a GPIO channel """
-    path = gpio_pins.get_path(channel, '/sys/devices/virtual/misc/gpio/mode/')
-    with open(path, 'w') as f:
+    path = gpio_mode_pins.get_path(channel)
+    with open(path, 'w+') as f:
         f.write('0' if mode == INPUT else '1')
