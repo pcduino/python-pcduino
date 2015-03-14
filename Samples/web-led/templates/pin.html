@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+	<title>Current Status </title>
+</head>
+
+<body >
+	<center>
+	<h1>Device Listing and Status</h1>
+	
+	<font size="5" color="red">
+	<p>The {{ pins['gpio0'].name }}
+	{% if pins['gpio0'].state == true %}
+		is currently on !  (<a href="/{{ 'gpio0' }}/off">turn off</a>)
+	{% else %}
+		is currently off !  (<a href="/{{ 'gpio0' }}/on">turn on</a>)		
+	{% endif %}
+	</p>
+	</font>
+
+	<font size="5" color="blue"
+	<p>The {{ pins['gpio1'].name }}
+	{% if pins['gpio1'].state == true %}
+		is currently on !  (<a href="/{{ 'gpio1' }}/off">turn off</a>)
+	{% else %}
+		is currently off !  (<a href="/{{ 'gpio1' }}/on">turn on</a>)		
+	{% endif %}
+	</p>
+	</font>
+	
+	{% if message %}
+	<h2>{{ message }}</h2>
+	{% endif %}
+	
+
+	<hr>
+	<font size="6">
+	<a href="http://www.pcduino.org">pcDuino.org</a>
+	</font>
+	</center>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+	<title>Current Status </title>
+</head>
+
+<body>
+	<center>
+	<font size="4" color="red">
+	<h1>Device Listing and Status</h1>
+	</font>
+	
+	<font size="3" color="blue">
+	{% for pin in pins %}	
+	<p>The {{ pins[pin].name }}
+	{% if pins[pin].state == true %}
+		is currently on   (<a href="/{{pin}}/off">turn off</a>)
+	{% else %}
+		is currently off   (<a href="/{{pin}}/on">turn on</a>)		
+	{% endif %}
+	</p>
+	{% endfor %}
+	
+	
+	{% if message %}
+	<h2>{{ message }}</h2>
+	{% endif %}
+	</font>
+
+	<hr>
+	<font size="6">
+	<a href="http://www.pcduino.org">pcDuino.org</a>
+	</font>
+	</center>
+
+</body>
+</html>
