@@ -1,9 +1,11 @@
 import os.path
 
-from pinmap import PinMap
+#from pinmap import PinMap
 
 
-pins = PinMap('/sys/class/leds', 'pwm', 5)
+#pins = PinMap('/sys/devices/virtual/misc/pwmtimer/', 'pwm', 12)
+
+#pinMap broken beyond repair for new sysfs-pwm
 
 MAX_PWM_LEVEL = 255
 
@@ -13,14 +15,26 @@ def analog_write(pin, value):
     value can be an number between 0 and 255.
 
     """
-    path = pins.get_path(pin)
+    path = '/sys/class/misc/pwmtimer/'
 
-    with open(os.path.join(path, 'max_brightness')) as f:
+    ending = 'pwm' + str(pin)
+
+    with open(os.path.join(path, 'max_level',ending )) as f:
         max_value = int(f.read())
 
     if value < 0 or value > MAX_PWM_LEVEL:
         raise ValueError("value must be between 0 and %s" % MAX_PWM_LEVEL)
 
-    map_level = (max_value * value) / MAX_PWM_LEVEL
-    with open(os.path.join(path, 'brightness'), 'w+') as f:
+    map_level = (max_value * value) // MAX_PWM_LEVEL
+	#// because python 3 compatibility
+   	#for some reason 255 becomes 0 (overflow?)
+ 
+    #disable -> change level -> enable , as requested by documentation
+    with open(os.path.join(path, 'enable', ending), 'w+') as f:
+        f.write("0\n")   
+    
+    with open(os.path.join(path, 'level', ending), 'w+') as f:
         f.write("%d\n" % map_level)
+    
+    with open(os.path.join(path, 'enable', ending), 'w+') as f:
+        f.write("1\n")    
