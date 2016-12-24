@@ -25,9 +25,9 @@ def analog_write(pin, value):
     if value < 0 or value > MAX_PWM_LEVEL:
         raise ValueError("value must be between 0 and %s" % MAX_PWM_LEVEL)
 
-    map_level = (max_value * value) // MAX_PWM_LEVEL
+    map_level = ((max_value-1) * value) // MAX_PWM_LEVEL
 	#// because python 3 compatibility
-   	#for some reason 255 becomes 0 (overflow?)
+   	#-1 because if it puts max_value the duty cycle somehow becomes 0 
  
     #disable -> change level -> enable , as requested by documentation
     with open(os.path.join(path, 'enable', ending), 'w+') as f:
