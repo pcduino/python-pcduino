@@ -1,4 +1,5 @@
 from pinmap import PinMap
+import os.path
 
 
 __all__ = ['HIGH', 'LOW', 'INPUT', 'OUTPUT','digital_write', 'digital_read',
@@ -35,6 +36,14 @@ def digital_read(channel):
 
 def pin_mode(channel, mode):
     """ Set Mode of a GPIO channel """
+
+    # has to disable new sysfs pwm
+    pwmPath = '/sys/class/misc/pwmtimer/enable/'
+    ending = 'pwm' + str(channel)
+    if os.path.isfile(os.path.join(pwmPath ,ending)):
+        with open(os.path.join(pwmPath, ending), 'w+') as f:
+            f.write('0')
+
     path = gpio_mode_pins.get_path(channel)
     with open(path, 'w+') as f:
         f.write('0' if mode == INPUT else '1')
