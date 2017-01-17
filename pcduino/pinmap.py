@@ -10,7 +10,7 @@ class InvalidChannelException(ValueError):
 
 class PinMap(object):
     def __init__(self, path, prefix, count):
-        self.pins = ['%s%s' % (prefix, i) for i in xrange(count)]
+        self.pins = ['%s%s' % (prefix, i) for i in range(count)]
         self.path = path
 
     def get_path(self, pin, path=None):
