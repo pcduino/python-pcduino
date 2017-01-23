@@ -1,4 +1,4 @@
-from pinmap import PinMap
+from pcduino.pinmap import PinMap
 import os.path
 
 
